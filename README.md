@@ -1,2 +1,0 @@
-# power
-Power measurements UI
