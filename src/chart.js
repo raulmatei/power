@@ -59,7 +59,10 @@ class CandleStickChartWithForceIndexIndicator extends React.Component {
     );
 
     const start = xAccessor(last(data));
-    const end = xAccessor(data[Math.max(0, data.length - 1440)]);
+
+    // TODO: implement selector for: 5m, 15m, 30m, 1h, 3h, 9h, 18h, 24h
+    // initialy show 3 hours for now
+    const end = xAccessor(data[Math.max(0, data.length - (60 * 3))]);
     const xExtents = [start, end];
 
     const margin = { left: 70, right: 70, top: 20, bottom: 30 };
@@ -90,7 +93,7 @@ class CandleStickChartWithForceIndexIndicator extends React.Component {
         ratio={ratio}
         margin={margin}
         type={type}
-        seriesName="MSFT"
+        seriesName="Voltage"
         data={data}
         xScale={xScale}
         xAccessor={xAccessor}
