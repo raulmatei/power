@@ -1,8 +1,9 @@
 import * as React from "react";
 import { render } from "react-dom";
-import Chart from "./Chart";
+import Chart from "./chart";
 import { getData } from "./utils";
 import "./styles.css";
+import LoadingIndicator from './loading-indicator'
 
 function ChartApp() {
   const [data, setData] = React.useState(null);
@@ -14,7 +15,7 @@ function ChartApp() {
   }, []);
 
   if (!data) {
-    return <div>Loading...</div>;
+    return <LoadingIndicator/>;
   }
 
   return <Chart type="svg" data={data} />;

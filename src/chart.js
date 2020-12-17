@@ -20,7 +20,7 @@ import {
 } from "react-stockcharts/lib/coordinates";
 
 import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
-import { SingleValueTooltip } from "react-stockcharts/lib/tooltip";
+// import { SingleValueTooltip } from "react-stockcharts/lib/tooltip";
 import { ema, forceIndex } from "react-stockcharts/lib/indicator";
 import { fitWidth } from "react-stockcharts/lib/helper";
 import { last } from "react-stockcharts/lib/utils";
