@@ -3,15 +3,19 @@
   "description": "",
   "version": "0.0.24",
   "dependencies": {
+    "async-polling": "^0.2.1",
+    "axios": "^0.21.0",
     "d3": "6.3.1",
     "d3-format": "^1.2.1",
     "d3-scale": "^1.0.7",
     "d3-time-format": "^2.1.1",
+    "express": "^4.17.1",
     "prop-types": "^15.6.0",
     "react": "16.8.6",
     "react-dom": "16.8.6",
     "react-stockcharts": "^0.7.8",
-    "shortid": "^2.2.8"
+    "shortid": "^2.2.8",
+    "simple-git": "^2.31.0"
   },
   "devDependencies": {
     "react-scripts": "^4.0.1"

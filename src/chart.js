@@ -20,19 +20,24 @@ import {
 } from "react-stockcharts/lib/coordinates";
 
 import { discontinuousTimeScaleProvider } from "react-stockcharts/lib/scale";
-// import { SingleValueTooltip } from "react-stockcharts/lib/tooltip";
+import { HoverTooltip } from "react-stockcharts/lib/tooltip";
 import { ema, forceIndex } from "react-stockcharts/lib/indicator";
 import { fitWidth } from "react-stockcharts/lib/helper";
 import { last } from "react-stockcharts/lib/utils";
+
+function tooltipContent ({currentItem}) {
+  return {
+    x: `Valoare măsurată: ${currentItem.inputVolt}V`,
+    y: []
+  };
+}
 
 class CandleStickChartWithForceIndexIndicator extends React.Component {
   render() {
     const { type, data: initialData, width, ratio } = this.props;
 
-    // const [lowestVoltage] = initialData.sort(
-    //   (a, b) => b.inputVoltage - a.inputVoltage
-    // );
-    initialData.forEach(({ inputVoltage }) => console.log(inputVoltage));
+    const [lowestVoltage] = [...initialData].map(({inputVolt}) => inputVolt)
+      .sort((a, b) => a - b).filter((inputVolt) => inputVolt > 0);
 
     const fi = forceIndex()
       .merge((d, c) => {
@@ -100,7 +105,7 @@ class CandleStickChartWithForceIndexIndicator extends React.Component {
         displayXAccessor={displayXAccessor}
         xExtents={xExtents}
       >
-        <Chart id={1} height={height - 300} yExtents={[120, 260]}>
+        <Chart id={1} height={height - 100} yExtents={[120, 260]}>
           <BarSeries
             yAccessor={(data) => data.inputVolt}
             fill={(data) => {
@@ -147,8 +152,10 @@ class CandleStickChartWithForceIndexIndicator extends React.Component {
             orient="left"
             edgeAt="left"
             yAccessor={(data) => data.targetVolt}
-            displayFormat={format(".2s")}
+            displayFormat={format(".3s")}
             fill="#769c46"
+            lineStroke="#769c46"
+            fontSize={12}
           />
 
           <EdgeIndicator
@@ -156,8 +163,39 @@ class CandleStickChartWithForceIndexIndicator extends React.Component {
             orient="right"
             edgeAt="right"
             yAccessor={(data) => data.targetVolt}
-            displayFormat={format(".2s")}
+            displayFormat={format(".3s")}
             fill="#769c46"
+            lineStroke="#769c46"
+          />
+
+          <EdgeIndicator
+            itemType="first"
+            orient="left"
+            edgeAt="left"
+            yAccessor={() => lowestVoltage}
+            displayFormat={format(".3s")}
+            fill="gray"
+            lineStroke="gray"
+          />
+
+          <EdgeIndicator
+            itemType="first"
+            orient="right"
+            edgeAt="right"
+            yAccessor={() => lowestVoltage}
+            displayFormat={format(".3s")}
+            fill="grey"
+            lineStroke="grey"
+          />
+
+          <EdgeIndicator
+            itemType="first"
+            orient="right"
+            edgeAt="right"
+            yAccessor={(data) => data.minimumVolt}
+            displayFormat={format(".2s")}
+            fill="#f8975e"
+            lineStroke="#f8975e"
           />
 
           <EdgeIndicator
@@ -167,6 +205,7 @@ class CandleStickChartWithForceIndexIndicator extends React.Component {
             yAccessor={(data) => data.minimumVolt}
             displayFormat={format(".2s")}
             fill="#f8975e"
+            lineStroke="#f8975e"
           />
 
           <EdgeIndicator
@@ -176,53 +215,24 @@ class CandleStickChartWithForceIndexIndicator extends React.Component {
             yAccessor={(data) => data.avrVolt}
             displayFormat={format(".2s")}
             fill="#de425b"
-          />
-        </Chart>
-
-        <Chart
-          id={2}
-          height={100}
-          // yExtents={(data) => data.inputVolt}
-          yExtents={[120, 260]}
-          origin={(w, h) => [0, h - 170]}
-          padding={{ top: 10, right: 0, bottom: 10, left: 0 }}
-        >
-          <XAxis axisAt="bottom" orient="bottom" />
-          <YAxis
-            axisAt="left"
-            orient="left"
-            ticks={4}
-            tickFormat={format(".2s")}
+            lineStroke="#de425b"
           />
 
-          <MouseCoordinateX
-            at="bottom"
-            orient="bottom"
-            rectWidth={148}
-            displayFormat={timeFormat("%Y-%m-%d %H:%M:%S")}
-          />
-          <MouseCoordinateY
-            at="left"
-            orient="left"
-            displayFormat={format(".1s")}
+          <EdgeIndicator
+            itemType="first"
+            orient="right"
+            edgeAt="right"
+            yAccessor={(data) => data.avrVolt}
+            displayFormat={format(".2s")}
+            fill="#de425b"
+            lineStroke="#de425b"
           />
 
-          {/* <AreaSeries baseAt={scale => scale(0)} yAccessor={fiEMA13.accessor()} /> */}
-          <AlternatingFillAreaSeries
-            baseAt={(scale) => {
-              console.log(scale(0));
-              return scale(0);
-            }}
-            yAccessor={fiEMA13.accessor()}
+          <HoverTooltip
+            yAccessor={(data) => data.inputVolt}
+            tooltipContent={tooltipContent}
+            fontSize={15}
           />
-          <StraightLine yValue={0} />
-
-          {/* <SingleValueTooltip
-            yAccessor={fiEMA13.accessor()}
-            yLabel={`ForceIndex (${fiEMA13.options().windowSize})`}
-            yDisplayFormat={format(".4s")}
-            origin={[-40, 15]}
-          /> */}
         </Chart>
         <CrossHairCursor />
       </ChartCanvas>
